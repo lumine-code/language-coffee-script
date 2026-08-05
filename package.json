@@ -11,6 +11,12 @@
     "cjsx"
   ],
   "license": "MIT",
+  "files": [
+    "grammars",
+    "settings",
+    "snippets",
+    "spec"
+  ],
   "engines": {
     "lumine": "^1.0.0",
     "node": "*"
