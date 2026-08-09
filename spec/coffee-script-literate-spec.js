@@ -2,9 +2,9 @@ describe("CoffeeScript (Literate) grammar", function () {
   let grammar = null;
 
   beforeEach(function () {
-    waitsForPromise(() => atom.packages.activatePackage("language-coffee-script"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-coffee-script"));
 
-    runs(() => (grammar = atom.grammars.grammarForScopeName("source.litcoffee")));
+    runs(() => (grammar = lumine.grammars.grammarForScopeName("source.litcoffee")));
   });
 
   it("parses the grammar", function () {

@@ -5,9 +5,9 @@ describe("CoffeeScript grammar", function () {
   let grammar = null;
 
   beforeEach(function () {
-    waitsForPromise(() => atom.packages.activatePackage("language-coffee-script"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-coffee-script"));
 
-    runs(() => (grammar = atom.grammars.grammarForScopeName("source.coffee")));
+    runs(() => (grammar = lumine.grammars.grammarForScopeName("source.coffee")));
   });
 
   it("parses the grammar", function () {
@@ -1431,7 +1431,7 @@ Until here
   });
 
   it("tokenizes embedded JavaScript", function () {
-    waitsForPromise(() => atom.packages.activatePackage("language-javascript"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-javascript"));
 
     runs(function () {
       let { tokens } = grammar.tokenizeLine("`;`");
@@ -3732,7 +3732,7 @@ a = 2\
   });
 
   describe("regular expressions", function () {
-    beforeEach(() => waitsForPromise(() => atom.packages.activatePackage("language-javascript"))); // Provides the regexp subgrammar
+    beforeEach(() => waitsForPromise(() => lumine.packages.activatePackage("language-javascript"))); // Provides the regexp subgrammar
 
     it("tokenizes regular expressions", function () {
       let { tokens } = grammar.tokenizeLine("/test/");

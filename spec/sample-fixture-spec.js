@@ -7,11 +7,11 @@ const path = require("path");
 
 describe("CoffeeScript sample fixtures", () => {
   beforeEach(async () => {
-    await atom.packages.activatePackage("language-coffee-script");
+    await lumine.packages.activatePackage("language-coffee-script");
   });
 
   it("tokenizes sample.coffee", async () => {
-    const editor = await atom.workspace.open(path.join(__dirname, "fixtures", "sample.coffee"));
+    const editor = await lumine.workspace.open(path.join(__dirname, "fixtures", "sample.coffee"));
 
     expect(editor.getGrammar().scopeName).toBe("source.coffee");
 
