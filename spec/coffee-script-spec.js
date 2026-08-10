@@ -4,10 +4,10 @@ const path = require("path");
 describe("CoffeeScript grammar", function () {
   let grammar = null;
 
-  beforeEach(function () {
-    waitsForPromise(() => lumine.packages.activatePackage("language-coffee-script"));
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-coffee-script");
 
-    runs(() => (grammar = lumine.grammars.grammarForScopeName("source.coffee")));
+    grammar = lumine.grammars.grammarForScopeName("source.coffee");
   });
 
   it("parses the grammar", function () {
@@ -1430,120 +1430,118 @@ Until here
     expect(source.search(/{,/)).toEqual(-1);
   });
 
-  it("tokenizes embedded JavaScript", function () {
-    waitsForPromise(() => lumine.packages.activatePackage("language-javascript"));
+  it("tokenizes embedded JavaScript", async () => {
+    await lumine.packages.activatePackage("language-javascript");
 
-    runs(function () {
-      let { tokens } = grammar.tokenizeLine("`;`");
-      expect(tokens[0]).toEqual({
-        value: "`",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "punctuation.definition.string.begin.coffee",
-        ],
-      });
-      expect(tokens[1]).toEqual({
-        value: ";",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "source.js.embedded.coffee",
-          "punctuation.terminator.statement.js",
-        ],
-      });
-      expect(tokens[2]).toEqual({
-        value: "`",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "punctuation.definition.string.end.coffee",
-        ],
-      });
+    let { tokens } = grammar.tokenizeLine("`;`");
+    expect(tokens[0]).toEqual({
+      value: "`",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "punctuation.definition.string.begin.coffee",
+      ],
+    });
+    expect(tokens[1]).toEqual({
+      value: ";",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "source.js.embedded.coffee",
+        "punctuation.terminator.statement.js",
+      ],
+    });
+    expect(tokens[2]).toEqual({
+      value: "`",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "punctuation.definition.string.end.coffee",
+      ],
+    });
 
-      const lines = grammar.tokenizeLines(`\
+    const lines = grammar.tokenizeLines(`\
 \`var a = 1;\`
 a = 2\
 `);
-      expect(lines[0][0]).toEqual({
-        value: "`",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "punctuation.definition.string.begin.coffee",
-        ],
-      });
-      expect(lines[0][1]).toEqual({
-        value: "var",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "source.js.embedded.coffee",
-          "storage.type.var.js",
-        ],
-      });
-      expect(lines[0][6]).toEqual({
-        value: ";",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "source.js.embedded.coffee",
-          "punctuation.terminator.statement.js",
-        ],
-      });
-      expect(lines[0][7]).toEqual({
-        value: "`",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "punctuation.definition.string.end.coffee",
-        ],
-      });
-      expect(lines[1][0]).toEqual({
-        value: "a",
-        scopes: ["source.coffee", "variable.assignment.coffee"],
-      });
+    expect(lines[0][0]).toEqual({
+      value: "`",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "punctuation.definition.string.begin.coffee",
+      ],
+    });
+    expect(lines[0][1]).toEqual({
+      value: "var",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "source.js.embedded.coffee",
+        "storage.type.var.js",
+      ],
+    });
+    expect(lines[0][6]).toEqual({
+      value: ";",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "source.js.embedded.coffee",
+        "punctuation.terminator.statement.js",
+      ],
+    });
+    expect(lines[0][7]).toEqual({
+      value: "`",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "punctuation.definition.string.end.coffee",
+      ],
+    });
+    expect(lines[1][0]).toEqual({
+      value: "a",
+      scopes: ["source.coffee", "variable.assignment.coffee"],
+    });
 
-      ({ tokens } = grammar.tokenizeLine("`// comment` a = 2"));
-      expect(tokens[0]).toEqual({
-        value: "`",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "punctuation.definition.string.begin.coffee",
-        ],
-      });
-      expect(tokens[1]).toEqual({
-        value: "//",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "source.js.embedded.coffee",
-          "comment.line.double-slash.js",
-          "punctuation.definition.comment.js",
-        ],
-      });
-      expect(tokens[2]).toEqual({
-        value: " comment",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "source.js.embedded.coffee",
-          "comment.line.double-slash.js",
-        ],
-      });
-      expect(tokens[3]).toEqual({
-        value: "`",
-        scopes: [
-          "source.coffee",
-          "string.quoted.script.coffee",
-          "punctuation.definition.string.end.coffee",
-        ],
-      });
-      expect(tokens[5]).toEqual({
-        value: "a",
-        scopes: ["source.coffee", "variable.assignment.coffee"],
-      });
+    ({ tokens } = grammar.tokenizeLine("`// comment` a = 2"));
+    expect(tokens[0]).toEqual({
+      value: "`",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "punctuation.definition.string.begin.coffee",
+      ],
+    });
+    expect(tokens[1]).toEqual({
+      value: "//",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "source.js.embedded.coffee",
+        "comment.line.double-slash.js",
+        "punctuation.definition.comment.js",
+      ],
+    });
+    expect(tokens[2]).toEqual({
+      value: " comment",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "source.js.embedded.coffee",
+        "comment.line.double-slash.js",
+      ],
+    });
+    expect(tokens[3]).toEqual({
+      value: "`",
+      scopes: [
+        "source.coffee",
+        "string.quoted.script.coffee",
+        "punctuation.definition.string.end.coffee",
+      ],
+    });
+    expect(tokens[5]).toEqual({
+      value: "a",
+      scopes: ["source.coffee", "variable.assignment.coffee"],
     });
   });
 
@@ -3732,7 +3730,9 @@ a = 2\
   });
 
   describe("regular expressions", function () {
-    beforeEach(() => waitsForPromise(() => lumine.packages.activatePackage("language-javascript"))); // Provides the regexp subgrammar
+    beforeEach(async () => {
+      await lumine.packages.activatePackage("language-javascript");
+    }); // Provides the regexp subgrammar
 
     it("tokenizes regular expressions", function () {
       let { tokens } = grammar.tokenizeLine("/test/");
