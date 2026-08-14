@@ -11,7 +11,7 @@ CoffeeScript language support.
 
 ## Installation
 
-To install `language-coffee-script` search for _language-coffee-script_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/language-coffee-script`.
+To install `language-coffee-script` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/language-coffee-script`.
 
 ## Contributing
 
