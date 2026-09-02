@@ -1,0 +1,18 @@
+{
+  "name": "Literate CoffeeScript",
+  "scopeName": "source.litcoffee",
+  "type": "tree-sitter",
+  "parser": "tree-sitter-markdown",
+  "fileTypes": ["litcoffee", "coffee.md"],
+  "comments": {
+    "start": "<!-- ",
+    "end": " -->"
+  },
+  "treeSitter": {
+    "parserSource": "github:tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown#v0.5.3",
+    "wasmBuildTool": "tree-sitter-cli#v0.26.13",
+    "grammar": "markdown.wasm",
+    "highlightsQuery": "litcoffee-highlights.scm",
+    "foldsQuery": "litcoffee-folds.scm"
+  }
+}

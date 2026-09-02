@@ -2,17 +2,20 @@
   "name": "language-coffee-script",
   "author": "lumine-code",
   "version": "1.0.0",
+  "main": "lib/main",
   "description": "CoffeeScript language support.",
   "keywords": [
     "coffeescript",
     "litcoffee",
     "cson",
     "cakefile",
-    "cjsx"
+    "cjsx",
+    "tree-sitter"
   ],
   "license": "MIT",
   "files": [
     "grammars",
+    "lib",
     "settings",
     "snippets",
     "spec"
@@ -30,6 +33,18 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+  },
+  "consumedServices": {
+    "hyperlink.injection": {
+      "versions": {
+        "^1.0.0": "consumeHyperlinkInjection"
+      }
+    },
+    "todo.injection": {
+      "versions": {
+        "^1.0.0": "consumeTodoInjection"
+      }
+    }
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
