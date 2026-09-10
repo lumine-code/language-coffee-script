@@ -1,4 +1,5 @@
-(comment) @comment.line.number-sign.coffee
+((comment) @comment.line.number-sign.coffee
+  (#set! adjust.endBeforeFirstMatchOf "\\r?$"))
 
 ((comment) @punctuation.definition.comment.coffee
   (#set! adjust.startAndEndAroundFirstMatchOf "^#+"))
@@ -22,15 +23,13 @@
 (class_property_method
   (identifier) @entity.name.function.method.coffee)
 
-(parameters
-  (parameter
-    (pattern
-      (identifier) @variable.parameter.coffee)))
+((identifier) @variable.parameter.coffee
+  (#is? test.typeAt "parent pattern")
+  (#is? test.typeAt "parent.parent parameter"))
 
-(parameters
-  (parameter
-    (pattern
-      (instance_variable (identifier) @variable.parameter.coffee))))
+((identifier) @variable.parameter.coffee
+  (#is? test.typeAt "parent instance_variable")
+  (#is? test.typeAt "parent.parent.parent parameter"))
 
 (function_call
   (expression
