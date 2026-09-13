@@ -3,6 +3,7 @@
   "scopeName": "source.litcoffee",
   "type": "tree-sitter",
   "parser": "tree-sitter-markdown",
+  "injectionNames": ["litcoffee"],
   "fileTypes": ["litcoffee", "coffee.md"],
   "comments": {
     "start": "<!-- ",

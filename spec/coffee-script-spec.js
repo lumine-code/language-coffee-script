@@ -41,6 +41,17 @@ describe("CoffeeScript Tree-sitter grammars", () => {
     );
   });
 
+  it("routes CoffeeScript aliases to the matching dialect", () => {
+    for (const alias of ["coffee", "coffee-script", "coffeescript", "cson"]) {
+      expect(lumine.grammars.treeSitterGrammarForLanguageString(alias)?.scopeName).toBe(
+        "source.coffee",
+      );
+    }
+    expect(lumine.grammars.treeSitterGrammarForLanguageString("litcoffee")?.scopeName).toBe(
+      "source.litcoffee",
+    );
+  });
+
   it("registers canonical embedded-language targets", () => {
     const registrations = [];
     const previous = lumine.grammars.addInjectionPoint;

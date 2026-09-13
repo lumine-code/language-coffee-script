@@ -3,7 +3,7 @@
   "scopeName": "source.coffee",
   "type": "tree-sitter",
   "parser": "tree-sitter-coffeescript",
-  "injectionNames": ["coffee", "coffeescript", "litcoffee"],
+  "injectionNames": ["coffee", "coffee-script", "coffeescript", "cson"],
   "fileTypes": ["coffee", "Cakefile", "cson", "_coffee", "cjsx"],
   "comments": {
     "start": "# "
