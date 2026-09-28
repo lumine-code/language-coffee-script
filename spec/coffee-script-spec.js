@@ -15,10 +15,10 @@ describe("CoffeeScript Tree-sitter grammars", () => {
 
   it("parses and highlights CoffeeScript", async () => {
     const editor = await openFixture("sample.coffee");
-    const languageMode = editor.getBuffer().getLanguageMode();
+    const root = editor.getSyntaxNodeAtBufferPosition([0, 0], (node) => node.parent == null);
 
     expect(editor.getGrammar().scopeName).toBe("source.coffee");
-    expect(languageMode.tree.rootNode.descendantsOfType("class_definition").length).toBe(2);
+    expect(root.descendantsOfType("class_definition").length).toBe(2);
     expect(editor.scopeDescriptorForBufferPosition([0, 2]).getScopesArray()).toContain(
       "comment.line.number-sign.coffee",
     );
@@ -29,10 +29,9 @@ describe("CoffeeScript Tree-sitter grammars", () => {
 
   it("parses Literate CoffeeScript and injects indented code", async () => {
     const editor = await openFixture("sample.litcoffee");
-    const languageMode = editor.getBuffer().getLanguageMode();
 
     expect(editor.getGrammar().scopeName).toBe("source.litcoffee");
-    expect(languageMode.tree.rootNode.hasError).toBe(false);
+    expect((await editor.getSyntaxDiagnostics()).hasError).toBe(false);
     expect(editor.scopeDescriptorForBufferPosition([0, 1]).getScopesArray()).toContain(
       "markup.heading.litcoffee",
     );

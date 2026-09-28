@@ -19,12 +19,12 @@ describe("CoffeeScript Tree-sitter highlights", () => {
     await editor.getBuffer().languageMode.ready;
   }
 
-  function rawCaptures(startRow, endRow) {
-    const layer = editor.getBuffer().languageMode.rootLanguageLayer;
-    return layer.queries.highlightsQuery.captures(layer.tree.rootNode, {
+  async function rawCaptures(startRow, endRow) {
+    const groups = await editor.getGrammarQueryCaptureGroups("highlightsQuery", {
       startPosition: new Point(startRow, 0),
       endPosition: new Point(endRow, 0),
     });
+    return groups.find(({ grammar }) => grammar === editor.getGrammar())?.captures ?? [];
   }
 
   it("preserves direct and instance parameter scopes", async () => {
@@ -46,9 +46,9 @@ describe("CoffeeScript Tree-sitter highlights", () => {
     );
     await setUp(`generated = (${parameters.join(", ")}) -> null`);
     expect(editor.getLastBufferRow()).toBe(12000);
-    expect(editor.getBuffer().languageMode.tree.rootNode.hasError).toBe(false);
+    expect((await editor.getSyntaxDiagnostics()).hasError).toBe(false);
 
-    const captures = rawCaptures(5997, 6003);
+    const captures = await rawCaptures(5997, 6003);
     const parameterCaptures = captures.filter(
       (capture) => capture.name === "variable.parameter.coffee",
     );
