@@ -13,10 +13,10 @@ CoffeeScript language support.
 
 To install `language-coffee-script` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/language-coffee-script`.
 
-## Services
+## Injections
 
-- `hyperlink.injection`: consumed to highlight links in comments and Literate CoffeeScript prose.
-- `todo.injection`: consumed to highlight task annotations in comments.
+- Static Tree-sitter injections highlight URLs with `language-hyperlink`.
+- Static Tree-sitter injections highlight comment markers with `language-todo`.
 
 ## Contributing
 
