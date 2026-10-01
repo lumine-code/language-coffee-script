@@ -1,4 +1,10 @@
+const fs = require("fs");
 const path = require("path");
+
+const packagePath = (name) => {
+  const sibling = path.resolve(__dirname, "..", "..", name);
+  return fs.existsSync(sibling) ? sibling : name;
+};
 
 describe("CoffeeScript Tree-sitter grammars", () => {
   beforeEach(async () => {
@@ -31,7 +37,9 @@ describe("CoffeeScript Tree-sitter grammars", () => {
     const editor = await openFixture("sample.litcoffee");
 
     expect(editor.getGrammar().scopeName).toBe("source.litcoffee");
-    expect((await editor.getSyntaxDiagnostics()).hasError).toBe(false);
+    expect(editor.getBuffer().getLanguageMode().rootLanguageLayer.tree.rootNode.hasError).toBe(
+      false,
+    );
     expect(editor.scopeDescriptorForBufferPosition([0, 1]).getScopesArray()).toContain(
       "markup.heading.litcoffee",
     );
@@ -51,29 +59,24 @@ describe("CoffeeScript Tree-sitter grammars", () => {
     );
   });
 
-  it("registers canonical embedded-language targets", () => {
-    const registrations = [];
-    const previous = lumine.grammars.addInjectionPoint;
-    lumine.grammars.addInjectionPoint = (scopeName, options) => {
-      registrations.push({ scopeName, options });
-      return { dispose() {} };
-    };
-
+  it("injects canonical languages into embedded source", async () => {
+    await lumine.packages.activatePackage(packagePath("language-regex"));
+    const editor = await lumine.workspace.open();
     try {
-      require("../lib/main").activate();
+      editor.setGrammar(lumine.grammars.grammarForScopeName("source.coffee"));
+      editor.setText(
+        "html = ```html\n<h1>Heading</h1>\n```\njs = `const value = 1;`\npattern = /a+/\n",
+      );
+      await editor.languageMode.ready;
+      await editor.languageMode.atGrammarSettlement();
+      expect(
+        editor.languageMode
+          .getAllInjectionLayers()
+          .map((layer) => layer.grammar.scopeName)
+          .sort(),
+      ).toEqual(["source.js", "source.regexp", "text.html.basic"]);
     } finally {
-      lumine.grammars.addInjectionPoint = previous;
+      editor.destroy();
     }
-
-    const targets = new Map(
-      registrations.map(({ scopeName, options }) => [
-        `${scopeName}:${options.type}`,
-        options.language({ descendantsOfType: () => [] }),
-      ]),
-    );
-    expect(targets.get("source.coffee:embedded_html")).toBe("html");
-    expect(targets.get("source.coffee:embedded_js")).toBe("javascript");
-    expect(targets.get("source.coffee:regex")).toBe("regex");
-    expect(targets.get("source.litcoffee:indented_code_block")).toBe("coffeescript");
   });
 });
