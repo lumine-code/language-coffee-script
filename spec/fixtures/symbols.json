@@ -1,0 +1,27 @@
+{
+  "source.coffee": {
+    "text": "class Greeter\n  greet: (name) ->\n    name\n\n# class Phantom\n",
+    "symbols": [
+      {
+        "name": "Greeter",
+        "tag": "class"
+      },
+      {
+        "name": "greet",
+        "tag": "method"
+      }
+    ],
+    "absent": ["Phantom"]
+  },
+  "source.litcoffee": {
+    "text": "A literate example.\n\n    greet = (name) -> name\n",
+    "symbols": [
+      {
+        "name": "greet",
+        "tag": "function"
+      }
+    ],
+    "absent": ["name"],
+    "injectedScopes": ["source.coffee"]
+  }
+}

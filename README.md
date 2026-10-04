@@ -5,6 +5,7 @@ CoffeeScript language support.
 ## Features
 
 - **Grammars**: provides Tree-sitter grammars built from [tree-sitter-coffeescript](https://github.com/svkozak/tree-sitter-coffeescript) and [tree-sitter-markdown](https://github.com/tree-sitter-grammars/tree-sitter-markdown).
+- **Symbols**: classes, named functions, methods and bindings, including literate code blocks.
 - **Syntax highlighting**: full grammar coverage for CoffeeScript and Literate CoffeeScript files.
 - **Snippets**: shortcuts for common declarations and control structures.
 - **Comment toggling**: line and block comment support.

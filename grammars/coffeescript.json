@@ -12,6 +12,7 @@
     "parserSource": "github:svkozak/tree-sitter-coffeescript#3bb4dbd68ca926c76b3baadb529da4de3726ea37",
     "wasmBuildTool": "tree-sitter-cli#v0.27.0",
     "grammar": "coffeescript.wasm",
+    "tagsQuery": "coffeescript-tags.scm",
     "highlightsQuery": "coffeescript-highlights.scm",
     "injectionsQuery": "coffeescript-injections.scm"
   }
