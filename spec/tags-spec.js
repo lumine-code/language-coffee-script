@@ -1,4 +1,10 @@
 const path = require("path");
+const fs = require("fs");
+
+const packagePath = (name) => {
+  const sibling = path.resolve(__dirname, "..", "..", name);
+  return fs.existsSync(sibling) ? sibling : name;
+};
 const fixtures = require("./fixtures/symbols.json");
 
 describe("language-coffee-script buffer symbol queries", () => {
@@ -123,7 +129,7 @@ describe("language-coffee-script buffer symbol queries", () => {
   });
 
   it("includes injected CoffeeScript declarations in a literate buffer", async () => {
-    await lumine.packages.activatePackage(path.resolve(__dirname, "..", "..", "language-html"));
+    await lumine.packages.activatePackage(packagePath("language-html"));
     const grammar = grammars.find(({ scopeName }) => scopeName === "source.litcoffee");
     editor = await lumine.workspace.open();
     editor.setGrammar(grammar);
