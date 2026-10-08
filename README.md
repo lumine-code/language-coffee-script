@@ -2,6 +2,8 @@
 
 CoffeeScript language support.
 
+Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/language-coffee-script`).
+
 ## Features
 
 - **Grammars**: provides Tree-sitter grammars built from [tree-sitter-coffeescript](https://github.com/svkozak/tree-sitter-coffeescript) and [tree-sitter-markdown](https://github.com/tree-sitter-grammars/tree-sitter-markdown).
