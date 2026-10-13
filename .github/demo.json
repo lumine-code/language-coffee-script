@@ -1,0 +1,16 @@
+{
+  "title": "language-coffee-script",
+  "description": "CoffeeScript syntax highlighting in the editor.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "326fcc6fe2cf02246d3180366be443691ef65491",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "CoffeeScript syntax highlighting at the default editor font size.",
+      "width": 1100,
+      "height": 820
+    }
+  ]
+}
