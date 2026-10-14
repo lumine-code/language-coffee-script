@@ -1,16 +1,61 @@
 {
   "title": "language-coffee-script",
-  "description": "CoffeeScript syntax highlighting in the editor.",
-  "recordedOn": "2026-10-13",
-  "sourceRevision": "326fcc6fe2cf02246d3180366be443691ef65491",
+  "description": "CoffeeScript syntax highlighting at the default editor font size.",
+  "recordedOn": "2026-10-14",
+  "sourceRevision": "fbd9f0b7bd53471857c6934fab3e59d2e8d647bb",
+  "themeSourceRevision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
   "mode": "normal",
   "fontSettings": "default",
+  "scenario": "demo.js",
+  "recipeHash": "d4e4f51ea85ce07faeaed7a63d3c4a7c9b4fc4f8fbbf659ee392a66fdd7b43d5",
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130",
+    "devicePixelRatio": 1,
+    "locale": "en-GB",
+    "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
+    "fontSize": 14,
+    "themes": ["one-day-syntax", "one-day-ui"]
+  },
+  "viewport": { "width": 1100, "height": 820 },
+  "cornerRadius": 10,
+  "sources": {
+    "editor": {
+      "revision": "c4d7a05fe6960ae6fb041981d6cf13e9c0286b17",
+      "dirty": true,
+      "workingTreeHash": "af0ec098e764416df9522f3c6e555050b520e4700da382b2b983b2ff3742bd0a"
+    },
+    "package": {
+      "revision": "fbd9f0b7bd53471857c6934fab3e59d2e8d647bb",
+      "dirty": true,
+      "workingTreeHash": "807b775cf5ee62e8d1e2229c013314c2eeb3dc0efc7f33af12a9aaf5f6d9bdfb"
+    },
+    "language-coffee-script": {
+      "revision": "fbd9f0b7bd53471857c6934fab3e59d2e8d647bb",
+      "dirty": true,
+      "workingTreeHash": "807b775cf5ee62e8d1e2229c013314c2eeb3dc0efc7f33af12a9aaf5f6d9bdfb"
+    },
+    "one-theme": {
+      "revision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
+      "dirty": true,
+      "workingTreeHash": "25d6ed50595d6b10f7d53e41dbbe8f92dcb5c0e911871356f3e6138e5c76df57"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "example.coffee",
+      "sha256": "0358b7ee040901a2d5f7533d2eb9432adce407aa06cc77f46893e05d508166b5"
+    }
+  ],
   "images": [
     {
       "file": "demo.png",
       "label": "CoffeeScript syntax highlighting at the default editor font size.",
       "width": 1100,
-      "height": 820
+      "height": 820,
+      "sha256": "d2dfddbaa4de11e687853a89c6bddbf8140d114f26540b1259f446fb9244405e"
     }
   ]
 }
