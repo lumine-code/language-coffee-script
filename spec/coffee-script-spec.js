@@ -48,6 +48,27 @@ describe("CoffeeScript Tree-sitter grammars", () => {
     );
   });
 
+  it("keeps code after a short HTML comment in Literate CoffeeScript", async () => {
+    const editor = await lumine.workspace.open();
+    try {
+      editor.setGrammar(lumine.grammars.grammarForScopeName("source.litcoffee"));
+      editor.setText("<!-->\n\n    square = (x) -> x * x\n");
+      await editor.languageMode.ready;
+      await editor.languageMode.atTransactionEnd();
+      expect(editor.languageMode.tree.rootNode.hasError).toBe(false);
+      expect(
+        editor.languageMode.tree.rootNode
+          .descendantsOfType("indented_code_block")
+          .map((node) => node.text),
+      ).toEqual(["    square = (x) -> x * x\n"]);
+      expect(editor.scopeDescriptorForBufferPosition([2, 5]).getScopesArray()).toContain(
+        "variable.other.coffee",
+      );
+    } finally {
+      editor.destroy();
+    }
+  });
+
   it("routes CoffeeScript aliases to the matching dialect", () => {
     for (const alias of ["coffee", "coffee-script", "coffeescript", "cson"]) {
       expect(lumine.grammars.treeSitterGrammarForLanguageString(alias)?.scopeName).toBe(
