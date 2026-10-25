@@ -1,5 +1,8 @@
 ((comment) @comment.line.number-sign.coffee
+  (#match? @comment.line.number-sign.coffee "^#(?!##)")
   (#set! adjust.endBeforeFirstMatchOf "\\r?$"))
+((comment) @comment.block.number-sign.coffee
+  (#match? @comment.block.number-sign.coffee "^###"))
 
 ((comment) @punctuation.definition.comment.coffee
   (#set! adjust.startAndEndAroundFirstMatchOf "^#+"))
