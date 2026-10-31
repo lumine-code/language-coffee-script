@@ -1,15 +1,20 @@
 {
-  ".source.coffee, .source.litcoffee, .source.coffee.md": {
+  ".source.coffee": {
     "editor": {
       "commentStart": "# ",
       "commentDelimiters": {
         "line": "#"
-      }
+      },
+      "autoIndentOnPaste": false
     }
   },
-  ".source.coffee": {
+  ".source.litcoffee, .source.coffee.md": {
     "editor": {
-      "autoIndentOnPaste": false
+      "commentStart": "<!-- ",
+      "commentEnd": " -->",
+      "commentDelimiters": {
+        "block": ["<!--", "-->"]
+      }
     }
   }
 }
