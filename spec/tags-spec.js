@@ -1,5 +1,18 @@
 const path = require("path");
 const fs = require("fs");
+const { Range } = require("lumine");
+const inspection = require.resolve("./helpers/syntax-inspection");
+
+async function tagGroups(editor) {
+  const groups = await editor.analyzeSyntax(inspection, "tags");
+  return groups.map((group) => ({
+    ...group,
+    captures: group.captures.map((capture) => ({
+      ...capture,
+      node: { ...capture.node, range: Range.fromObject(capture.node.range) },
+    })),
+  }));
+}
 
 const packagePath = (name) => {
   const sibling = path.resolve(__dirname, "..", "..", name);
@@ -27,7 +40,7 @@ describe("language-coffee-script buffer symbol queries", () => {
     editor.setText(text);
     expect(editor.getPath()).toBeUndefined();
     expect(await editor.whenGrammarSettled()).toBe(true);
-    const groups = await editor.getGrammarQueryCaptureGroups("tagsQuery");
+    const groups = await tagGroups(editor);
     if (fixtures[scopeName]?.noSymbols) {
       expect(editor.hasGrammarQuery("tagsQuery")).toBe(false);
       expect(groups).toEqual([]);
@@ -92,7 +105,7 @@ describe("language-coffee-script buffer symbol queries", () => {
       const renamed = `${symbol.name}Updated`;
       editor.setText(`\n${fixture.text.split(symbol.name).join(renamed)}`);
       expect(await editor.whenGrammarSettled()).toBe(true);
-      const groups = await editor.getGrammarQueryCaptureGroups("tagsQuery");
+      const groups = await tagGroups(editor);
       const scopes = fixture.injectedScopes ?? [scopeName];
       const current = groups
         .filter(({ grammar }) => scopes.includes(grammar.scopeName))
@@ -135,7 +148,7 @@ describe("language-coffee-script buffer symbol queries", () => {
     editor.setGrammar(grammar);
     editor.setText("A literate example.\n\n    greet = (name) -> name\n");
     expect(await editor.whenGrammarSettled()).toBe(true);
-    const groups = await editor.getGrammarQueryCaptureGroups("tagsQuery");
+    const groups = await tagGroups(editor);
     const coffee = groups.find(({ grammar }) => grammar.scopeName === "source.coffee");
     expect(coffee).toBeDefined();
     expectSymbol(coffee.captures, { name: "greet", tag: "function" });

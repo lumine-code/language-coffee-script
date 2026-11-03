@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { Point } = require("lumine");
+const inspection = require.resolve("./helpers/syntax-inspection");
 
 const HIGHLIGHTS_PATH = path.join(__dirname, "..", "grammars", "coffeescript-highlights.scm");
 
@@ -16,28 +16,23 @@ describe("CoffeeScript Tree-sitter highlights", () => {
   async function setUp(text) {
     editor = await lumine.workspace.open("parameters.coffee");
     editor.setText(text);
-    await editor.getBuffer().languageMode.ready;
+    await editor.whenGrammarSettled();
   }
 
   async function rawCaptures(startRow, endRow) {
-    const query = await editor.getGrammar().getQuery("highlightsQuery");
-    const root = editor.getBuffer().getLanguageMode().rootLanguageLayer.tree.rootNode;
-    return query.captures(root, {
-      startPosition: new Point(startRow, 0),
-      endPosition: new Point(endRow, 0),
-    });
+    return editor.analyzeSyntax(inspection, "rawHighlights", { startRow, endRow });
   }
 
   it("preserves direct and instance parameter scopes", async () => {
     const source = "fn = (direct, @member) -> null";
     await setUp(source);
 
-    const scopesAt = (needle) => {
+    const scopesAt = async (needle) => {
       const column = source.indexOf(needle);
-      return editor.scopeDescriptorForBufferPosition([0, column]).getScopesArray();
+      return editor.analyzeSyntax(inspection, "scopes", { position: [0, column] });
     };
-    expect(scopesAt("direct")).toContain("variable.parameter.coffee");
-    expect(scopesAt("member")).toContain("variable.parameter.coffee");
+    expect(await scopesAt("direct")).toContain("variable.parameter.coffee");
+    expect(await scopesAt("member")).toContain("variable.parameter.coffee");
   });
 
   it("keeps a 6000-parameter parent leaf-rooted with local tile captures", async () => {
@@ -47,9 +42,7 @@ describe("CoffeeScript Tree-sitter highlights", () => {
     );
     await setUp(`generated = (${parameters.join(", ")}) -> null`);
     expect(editor.getLastBufferRow()).toBe(12000);
-    expect(editor.getBuffer().getLanguageMode().rootLanguageLayer.tree.rootNode.hasError).toBe(
-      false,
-    );
+    expect((await editor.analyzeSyntax(inspection, "root")).hasError).toBe(false);
 
     const captures = await rawCaptures(5997, 6003);
     const parameterCaptures = captures.filter(

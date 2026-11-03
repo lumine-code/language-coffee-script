@@ -23,9 +23,7 @@ describe("language-coffee-script comment scope boundaries", () => {
     it("classifies " + JSON.stringify(text) + " as " + expected, async () => {
       if (grammarScope) editor.setGrammar(lumine.grammars.grammarForScopeName(grammarScope));
       editor.setText(text);
-      await editor.languageMode.ready;
-      await editor.languageMode.atGrammarSettlement();
-      await editor.languageMode.refresh?.();
+      await editor.whenGrammarSettled();
       const position = editor.getBuffer().positionForCharacterIndex(text.indexOf(token));
       const scopes = editor.scopeDescriptorForBufferPosition(position).getScopesArray();
       expect(scopes).toContain(expected);

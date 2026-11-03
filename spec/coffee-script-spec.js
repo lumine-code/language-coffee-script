@@ -1,5 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const inspection = require.resolve("./helpers/syntax-inspection");
+const rootSummary = (editor, types = []) => editor.analyzeSyntax(inspection, "root", { types });
+const scopesAt = (editor, position) => editor.analyzeSyntax(inspection, "scopes", { position });
 
 const packagePath = (name) => {
   const sibling = path.resolve(__dirname, "..", "..", name);
@@ -15,37 +18,27 @@ describe("CoffeeScript Tree-sitter grammars", () => {
 
   async function openFixture(name) {
     const editor = await lumine.workspace.open(path.join(__dirname, "fixtures", name));
-    await editor.languageMode.ready;
+    await editor.whenGrammarSettled();
     return editor;
   }
 
   it("parses and highlights CoffeeScript", async () => {
     const editor = await openFixture("sample.coffee");
-    const root = editor.getSyntaxNodeAtBufferPosition([0, 0], (node) => node.parent == null);
+    const root = await rootSummary(editor, ["class_definition"]);
 
     expect(editor.getGrammar().scopeName).toBe("source.coffee");
-    expect(root.descendantsOfType("class_definition").length).toBe(2);
-    expect(editor.scopeDescriptorForBufferPosition([0, 2]).getScopesArray()).toContain(
-      "comment.line.number-sign.coffee",
-    );
-    expect(editor.scopeDescriptorForBufferPosition([20, 7]).getScopesArray()).toContain(
-      "entity.name.type.class.coffee",
-    );
+    expect(root.nodes.class_definition.length).toBe(2);
+    expect(await scopesAt(editor, [0, 2])).toContain("comment.line.number-sign.coffee");
+    expect(await scopesAt(editor, [20, 7])).toContain("entity.name.type.class.coffee");
   });
 
   it("parses Literate CoffeeScript and injects indented code", async () => {
     const editor = await openFixture("sample.litcoffee");
 
     expect(editor.getGrammar().scopeName).toBe("source.litcoffee");
-    expect(editor.getBuffer().getLanguageMode().rootLanguageLayer.tree.rootNode.hasError).toBe(
-      false,
-    );
-    expect(editor.scopeDescriptorForBufferPosition([0, 1]).getScopesArray()).toContain(
-      "markup.heading.litcoffee",
-    );
-    expect(editor.scopeDescriptorForBufferPosition([4, 5]).getScopesArray()).toContain(
-      "variable.other.coffee",
-    );
+    expect((await rootSummary(editor)).hasError).toBe(false);
+    expect(await scopesAt(editor, [0, 1])).toContain("markup.heading.litcoffee");
+    expect(await scopesAt(editor, [4, 5])).toContain("variable.other.coffee");
   });
 
   it("keeps code after a short HTML comment in Literate CoffeeScript", async () => {
@@ -53,17 +46,11 @@ describe("CoffeeScript Tree-sitter grammars", () => {
     try {
       editor.setGrammar(lumine.grammars.grammarForScopeName("source.litcoffee"));
       editor.setText("<!-->\n\n    square = (x) -> x * x\n");
-      await editor.languageMode.ready;
-      await editor.languageMode.atTransactionEnd();
-      expect(editor.languageMode.tree.rootNode.hasError).toBe(false);
-      expect(
-        editor.languageMode.tree.rootNode
-          .descendantsOfType("indented_code_block")
-          .map((node) => node.text),
-      ).toEqual(["    square = (x) -> x * x\n"]);
-      expect(editor.scopeDescriptorForBufferPosition([2, 5]).getScopesArray()).toContain(
-        "variable.other.coffee",
-      );
+      await editor.whenGrammarSettled();
+      const root = await rootSummary(editor, ["indented_code_block"]);
+      expect(root.hasError).toBe(false);
+      expect(root.nodes.indented_code_block).toEqual(["    square = (x) -> x * x\n"]);
+      expect(await scopesAt(editor, [2, 5])).toContain("variable.other.coffee");
     } finally {
       editor.destroy();
     }
@@ -88,14 +75,12 @@ describe("CoffeeScript Tree-sitter grammars", () => {
       editor.setText(
         "html = ```html\n<h1>Heading</h1>\n```\njs = `const value = 1;`\npattern = /a+/\n",
       );
-      await editor.languageMode.ready;
-      await editor.languageMode.atGrammarSettlement();
-      expect(
-        editor.languageMode
-          .getAllInjectionLayers()
-          .map((layer) => layer.grammar.scopeName)
-          .sort(),
-      ).toEqual(["source.js", "source.regexp", "text.html.basic"]);
+      await editor.whenGrammarSettled();
+      expect(await editor.analyzeSyntax(inspection, "injectionScopes")).toEqual([
+        "source.js",
+        "source.regexp",
+        "text.html.basic",
+      ]);
     } finally {
       editor.destroy();
     }
