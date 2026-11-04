@@ -15,6 +15,9 @@
     "grammar": "markdown.wasm",
     "highlightsQuery": "litcoffee-highlights.scm",
     "foldsQuery": "litcoffee-folds.scm",
-    "injectionsQuery": "litcoffee-injections.scm"
+    "injectionsQuery": "litcoffee-injections.scm",
+    "contentEditPolicies": {
+      "content-words": "../lib/content-edit-policy.js"
+    }
   }
 }

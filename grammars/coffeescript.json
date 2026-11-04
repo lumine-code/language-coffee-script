@@ -15,6 +15,9 @@
     "tagsQuery": "coffeescript-tags.scm",
     "highlightsQuery": "coffeescript-highlights.scm",
     "injectionsQuery": "coffeescript-injections.scm",
-    "indentsQuery": "coffeescript-indents.scm"
+    "indentsQuery": "coffeescript-indents.scm",
+    "contentEditPolicies": {
+      "content-words": "../lib/content-edit-policy.js"
+    }
   }
 }
