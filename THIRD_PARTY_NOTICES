@@ -87,6 +87,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 Source: https://github.com/svkozak/tree-sitter-coffeescript
 Revision: 3bb4dbd68ca926c76b3baadb529da4de3726ea37
 
+Parser source: github:svkozak/tree-sitter-coffeescript#3bb4dbd68ca926c76b3baadb529da4de3726ea37
+Resolved commit: 3bb4dbd68ca926c76b3baadb529da4de3726ea37
+
 Original file: LICENSE.txt
 
 The MIT License (MIT)
@@ -116,6 +119,9 @@ SOFTWARE.
 Source: https://github.com/lumine-code/tree-sitter-markdown
 Commit: 8cb4fe833cdf7323fac0e1df6e5674d9f238a4f3
 Ref: 8cb4fe833cdf7323fac0e1df6e5674d9f238a4f3
+
+Parser source: github:lumine-code/tree-sitter-markdown/tree-sitter-markdown#8cb4fe833cdf7323fac0e1df6e5674d9f238a4f3
+Resolved commit: 8cb4fe833cdf7323fac0e1df6e5674d9f238a4f3
 
 Original file: LICENSE
 
